@@ -7,11 +7,11 @@
 
 ## 目次
 - [ファイルツリー](#ファイルツリー)
-- [config.ini](#config.ini)
-- [Form1.py](#Form1.py)
-- [Form1Definition.py](#Form1Definition.py)
-- [main.py](#main.py)
-- [Motor.py](#Motor.py)
+- [config.ini](#configini)
+- [Form1.py](#form1py)
+- [Form1Definition.py](#form1definitionpy)
+- [main.py](#mainpy)
+- [Motor.py](#motorpy)
 
 ## ファイルツリー
 <pre>
