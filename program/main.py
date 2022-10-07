@@ -7,7 +7,7 @@ def main():
     root.title("motor")
     root.geometry("1024x768")
     form1 = Form1.Form1(root)
-    form1.first_screen()
+    form1.player_screen()
     form1.setting_screen()
     root.mainloop()
 

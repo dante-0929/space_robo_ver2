@@ -10,7 +10,7 @@ class Form1:
         self.widget_obj = Form1Definition.Form1Definition(self.root)
         self.wgl = self.widget_obj.widgets_definition()
 
-    def first_screen(self):
+    def player_screen(self):
 
         # タブをnotebookオブジェクトに追加して表示
         self.wgl["root_widgets"]["notebook"].add(self.wgl["note_book_widgets"]["tab_one"], text="player")
