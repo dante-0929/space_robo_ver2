@@ -64,7 +64,7 @@ wgl = FormDefinition.widgets_definition()
 ```python
 {
     "root_widgets": {
-            "widget1": Widget1.instance,
+            "widget1": Widget1.Instance,
             "widget2": Widget2.Instance,
             "widget3": Widget3.Instance,
             ...
@@ -72,7 +72,7 @@ wgl = FormDefinition.widgets_definition()
             ...
         },
     "note_book_widgets": {
-            "widget1": Widget1.instance,
+            "widget1": Widget1.Instance,
             "widget2": Widget2.Instance,
             "widget3": Widget3.Instance,
             ...
