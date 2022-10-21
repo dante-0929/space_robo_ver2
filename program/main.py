@@ -9,6 +9,8 @@ def main():
     form1 = Form1.Form1(root)
     form1.player_screen()
     form1.setting_screen()
+    form1.canvas_camera()
+    root.after(10, form1.canvas_camera())
     root.mainloop()
 
 

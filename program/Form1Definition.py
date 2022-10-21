@@ -5,13 +5,19 @@
 import tkinter as tk
 import tkinter.ttk as ttk
 import tkinter.font as tkfont
+import configparser
+from lib import WidgetCreatorForConfig
 
 
 class Form1Definition:
-    def __init__(self, root_instance):
+    def __init__(self, root_instance: tk.Tk):
         self.root = root_instance
 
-    def widgets_definition(self):
+        self.config_ini = configparser.ConfigParser()
+        self.config_ini.optionxform = str
+        self.config_ini.read('config/config.ini')
+
+    def widgets_definition(self) -> dict:
         # TODO root_widgetsなどの変数名だとrootを定義していると解釈されてしまうため変更が必要
         root_widgets = {
             "notebook": ttk.Notebook(self.root),
@@ -24,6 +30,10 @@ class Form1Definition:
         }
 
         tab_one_widgets = {
+            'main_canvas': tk.Canvas(note_book_widgets["tab_one"], width=1024, height=768, bg="#fff"),
+
+        }
+        main_canvas_widgets = {
             "duty_frame": tk.Frame(note_book_widgets["tab_one"]),
             "duty_speed_p1": tk.Label(note_book_widgets["tab_one"], text="p1 duty:0.0", font=root_widgets["text_font"]),
             "duty_speed_p2": tk.Label(note_book_widgets["tab_one"], text="p2 duty:0.0", font=root_widgets["text_font"]),
@@ -48,12 +58,16 @@ class Form1Definition:
             "behavior_range_entry": tk.Entry(tab_two_forms["behavior_range_form"]),
         }
 
+        out_create = WidgetCreatorForConfig.WidgetCreator.OutCreateWidget(self.config_ini, note_book_widgets["tab_two"])
+
         widgets = {
             "root_widgets": root_widgets,
             "note_book_widgets": note_book_widgets,
             "tab_two_forms": tab_two_forms,
             "tab_two_widgets": tab_two_widgets,
             "tab_one_widgets": tab_one_widgets,
+            'main_canvas_widgets': main_canvas_widgets,
+            "config_setting": out_create.bunch_create(),
         }
         return widgets
         key_event = KeyEvent.KeyEvent(self.duty_speed_p1)

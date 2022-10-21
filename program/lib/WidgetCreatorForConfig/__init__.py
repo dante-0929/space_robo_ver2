@@ -1,0 +1,3 @@
+from lib.WidgetCreatorForConfig import WidgetCreator as WidgetCreator
+from lib.WidgetCreatorForConfig import WidgetTextCreator as WidgetTextCreator
+
