@@ -1,3 +1,3 @@
-from lib.WidgetCreatorForConfig import WidgetCreator as WidgetCreator
-from lib.WidgetCreatorForConfig import WidgetTextCreator as WidgetTextCreator
-
+import os
+__all__ = [k[0:-3] for k in filter(lambda x: x[0] != "_",
+                                   os.listdir(os.path.dirname(__file__)))]

@@ -6,17 +6,19 @@ import tkinter as tk
 import tkinter.ttk as ttk
 import tkinter.font as tkfont
 import configparser
-from lib import WidgetCreatorForConfig
+from lib.WidgetCreatorForConfig import *
 
 
 class Form1Definition:
     def __init__(self, root_instance: tk.Tk):
         self.root = root_instance
 
+        # config.iniからデータを読み取る
         self.config_ini = configparser.ConfigParser()
         self.config_ini.optionxform = str
         self.config_ini.read('config/config.ini')
 
+    # tkinterのwidgetを定義
     def widgets_definition(self) -> dict:
         # TODO root_widgetsなどの変数名だとrootを定義していると解釈されてしまうため変更が必要
         root_widgets = {
@@ -58,8 +60,10 @@ class Form1Definition:
             "behavior_range_entry": tk.Entry(tab_two_forms["behavior_range_form"]),
         }
 
-        out_create = WidgetCreatorForConfig.WidgetCreator.OutCreateWidget(self.config_ini, note_book_widgets["tab_two"])
+        # config.iniをもとにwidgetを自動生成
+        out_create = WidgetCreator.OutCreateWidget(self.config_ini, note_book_widgets["tab_two"])
 
+        # returnで返す辞書を作成
         widgets = {
             "root_widgets": root_widgets,
             "note_book_widgets": note_book_widgets,

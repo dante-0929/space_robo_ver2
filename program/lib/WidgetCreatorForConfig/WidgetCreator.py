@@ -1,9 +1,11 @@
 import tkinter as tk
 from program.lib.WidgetCreatorForConfig import WidgetTextCreator
+import sys
 
 
 class OutCreateWidget:
     def __init__(self, config, parent_factor):
+        # configファイルからデータを読み込み
         self.config_ini = dict(config)
         self.root = parent_factor
         self.wct = WidgetTextCreator.TextCreator(self.config_ini)
@@ -18,7 +20,9 @@ class OutCreateWidget:
                 elif self.config_ini[i]['Type'] == 'Entry':
                     reply[i] = self.type_entry(i)
                 else:
-                    print('未実装です')
+                    print('TypeError:widgetのタイプが間違っています', file=sys.stderr)
+                    sys.exit(1)
+        print(reply)
         return reply
 
     def type_spinbox(self, title: str) -> dict:
