@@ -4,6 +4,7 @@ import Form1
 import lib.Motor as motor
 import Form1Definition
 import lib.KeyEvent as KeyEvent
+import os
 # import RPi.GPIO as GPIO
 
 
@@ -36,6 +37,8 @@ def main():
 
 
 if __name__ in "__main__":
+    path = os.getcwd()
+    print(path)
     root = tk.Tk()
     widget_obj = Form1Definition.Form1Definition(root)
     form1 = Form1.Form1(root, widget_obj)

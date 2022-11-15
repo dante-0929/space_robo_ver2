@@ -1,5 +1,5 @@
 import tkinter as tk
-from program.lib.WidgetCreatorForConfig import WidgetTextCreator
+from lib.WidgetCreatorForConfig import WidgetTextCreator
 import sys
 
 
