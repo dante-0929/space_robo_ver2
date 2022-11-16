@@ -9,7 +9,7 @@ class Form1:
         self.root = root_instance
 
         # ウィジェットのインスタンスを定義ファイルから持ってくる
-        self.wgl = widget_obj.widgets_definition()
+        self.wgl = widget_obj
 
         # 画面のサイズを取得
         try:
@@ -20,7 +20,7 @@ class Form1:
             print('\033[96m' + str(e) + '\033[0m')
 
         # OpenCVのインスタンス及びカメラオープン
-        self.capture = cv2.VideoCapture(0000)
+        # self.capture = cv2.VideoCapture(0000)
 
     def player_screen(self):
 

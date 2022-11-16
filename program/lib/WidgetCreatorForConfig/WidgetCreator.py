@@ -19,6 +19,8 @@ class OutCreateWidget:
                     reply[i] = self.type_spinbox(i)
                 elif self.config_ini[i]['Type'] == 'Entry':
                     reply[i] = self.type_entry(i)
+                elif self.config_ini[i]['Type'] == 'Button':
+                    reply[i] = self.type_button(i)
                 else:
                     print('TypeError:widgetのタイプが間違っています', file=sys.stderr)
                     sys.exit(1)
@@ -47,4 +49,14 @@ class OutCreateWidget:
                 reply[i + "label"] = tk.Label(self.root, text=self.wct.uppercase_before_spacer_put(i))
                 reply[i + "input"] = tk.Entry(self.root)
                 reply[i + "input"].insert(0, self.config_ini[title][i])
+        return reply
+
+    def type_button(self, title: str) -> dict:
+        reply = {}
+        for i in list(self.config_ini[title]):
+            if i == 'Type':
+                pass
+            else:
+                reply[i + "label"] = tk.Label(self.root, text=self.wct.uppercase_before_spacer_put(i))
+                reply[i + "input"] = tk.Button(self.root, text=self.config_ini[title][i])
         return reply

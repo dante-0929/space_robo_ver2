@@ -1,7 +1,7 @@
 import tkinter as tk
 import threading
 import Form1
-import lib.Motor as motor
+import lib.Motor as Motor
 import Form1Definition
 import lib.KeyEvent as KeyEvent
 import os
@@ -29,9 +29,10 @@ def main():
     job1.start()
 
     # KeyEventを待機
-    root.bind("<KeyPress>", key_event.bind_func)
+    widget_obj['note_book_widgets']['tab_one'].bind("<KeyPress>", key_event.bind_func)
     root.bind("<KeyRelease>", key_event.bind_func)
-
+    for i in list(widget_obj['config_setting']['KEY_CONFIG'].values()):
+        i.bind("<Button-1>", key_event.key_setting)
     # formを待機
     root.mainloop()
 
@@ -40,9 +41,10 @@ if __name__ in "__main__":
     path = os.getcwd()
     print(path)
     root = tk.Tk()
-    widget_obj = Form1Definition.Form1Definition(root)
+    widget_instance = Form1Definition.Form1Definition(root)
+    widget_obj = widget_instance.widgets_definition()
     form1 = Form1.Form1(root, widget_obj)
-    motor = motor.Motor()
-    key_event = KeyEvent.KeyEvent(motor)
+    motor = Motor.Motor()
+    key_event = KeyEvent.KeyEvent(motor, widget_obj)
     main()
     # GPIO.cleanup()

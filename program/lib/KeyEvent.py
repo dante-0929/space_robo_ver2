@@ -1,13 +1,15 @@
 import configparser
+import tkinter as tk
 # import matplotlib.pyplot as plt
 
 
 class KeyEvent:
-    def __init__(self, motor_class):
+    def __init__(self, motor_class, widget_obj):
         self.config_ini = configparser.ConfigParser()
         self.config_ini.optionxform = str
         self.config_ini.read('config/config.ini')
         self.motor = motor_class
+        self.widget_obj = widget_obj
         self.duty = 0
         self.test_list = []
 
@@ -27,6 +29,20 @@ class KeyEvent:
             self.pressed_q()
         elif key == self.config_ini['KEY_CONFIG']['Deceleration']:
             self.pressed_shift()
+
+    def key_setting(self, event):
+        sub_win = tk.Toplevel()
+        sub_win.geometry("300x100")
+        label_sub = tk.Label(sub_win, text="キーを入力してください")
+        sub_label = tk.Label(sub_win, text=event.widget['text'])
+        label_sub.pack()
+        sub_label.pack()
+        sub_label.focus_set()
+        sub_win.bind("<KeyPress>", self.sub_setting_key, event.winget)
+
+    def sub_setting_key(self, event, win):
+        key = event.keysym
+        event.widget['text'] = key
 
     def pressed_a(self):
         steering_left = float(self.config_ini['STEERING']['Left'])
