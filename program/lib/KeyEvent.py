@@ -10,6 +10,7 @@ class KeyEvent:
         self.config_ini.read('config/config.ini')
         self.motor = motor_class
         self.widget_obj = widget_obj
+        self.sub_label = ''
         self.duty = 0
         self.test_list = []
 
@@ -34,15 +35,17 @@ class KeyEvent:
         sub_win = tk.Toplevel()
         sub_win.geometry("300x100")
         label_sub = tk.Label(sub_win, text="キーを入力してください")
-        sub_label = tk.Label(sub_win, text=event.widget['text'])
+        self.sub_label = tk.Label(sub_win)
         label_sub.pack()
-        sub_label.pack()
-        sub_label.focus_set()
-        sub_win.bind("<KeyPress>", self.sub_setting_key, event.winget)
+        self.sub_label.pack()
+        self.sub_label["text"] = event.widget["text"]
+        sub_win.bind("<KeyPress>", self.sub_setting_key)
+        self.key_setting_widget = event.widget
 
-    def sub_setting_key(self, event, win):
+    def sub_setting_key(self, event):
         key = event.keysym
-        event.widget['text'] = key
+        self.sub_label['text'] = key
+        self.key_setting_widget['text'] = key
 
     def pressed_a(self):
         steering_left = float(self.config_ini['STEERING']['Left'])

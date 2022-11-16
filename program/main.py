@@ -26,7 +26,7 @@ def main():
 
     # playerタブの映像をサブタスクで実行
     job1 = threading.Thread(target=canvas_sled)
-    job1.start()
+    # job1.start()
 
     # KeyEventを待機
     widget_obj['note_book_widgets']['tab_one'].bind("<KeyPress>", key_event.bind_func)
