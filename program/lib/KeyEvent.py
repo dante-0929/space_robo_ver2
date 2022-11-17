@@ -1,5 +1,7 @@
 import configparser
 import tkinter as tk
+
+
 # import matplotlib.pyplot as plt
 
 
@@ -10,6 +12,7 @@ class KeyEvent:
         self.config_ini.read('config/config.ini')
         self.motor = motor_class
         self.widget_obj = widget_obj
+        self.sub_win = None
         self.sub_label = ''
         self.duty = 0
         self.test_list = []
@@ -32,14 +35,16 @@ class KeyEvent:
             self.pressed_shift()
 
     def key_setting(self, event):
-        sub_win = tk.Toplevel()
-        sub_win.geometry("300x100")
-        label_sub = tk.Label(sub_win, text="キーを入力してください")
-        self.sub_label = tk.Label(sub_win)
-        label_sub.pack()
-        self.sub_label.pack()
-        self.sub_label["text"] = event.widget["text"]
-        sub_win.bind("<KeyPress>", self.sub_setting_key)
+        if self.sub_win is None or not self.sub_win.winfo_exists():
+            self.sub_win = tk.Toplevel()
+            self.sub_win.geometry("300x100")
+            label_sub = tk.Label(self.sub_win, text="キーを入力してください")
+            self.sub_label = tk.Label(self.sub_win)
+            label_sub.pack()
+            self.sub_label.pack()
+            self.sub_label["text"] = event.widget["text"]
+            self.sub_win.bind("<KeyPress>", self.sub_setting_key)
+        self.sub_win.focus_set()
         self.key_setting_widget = event.widget
 
     def sub_setting_key(self, event):
@@ -93,4 +98,3 @@ class KeyEvent:
             self.duty = self.motor.deceleration(self.duty)
             self.test_list.append(self.duty)
             self.motor.rotate_motor(self.duty, 0, self.duty, 0, 0, 0)
-

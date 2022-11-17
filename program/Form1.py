@@ -51,6 +51,7 @@ class Form1:
         for i in list(self.wgl['config_setting'].values()):
             for j in list(i.values()):
                 j.pack(anchor=tk.W)
+        self.wgl["tab_two_widgets"]["save_button"].place(x=920, y=680)
 
     def canvas_camera(self):
         con.create_canvas_image(self.capture, self.display_width, self.display_height, self.wgl)

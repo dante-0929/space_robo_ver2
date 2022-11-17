@@ -58,6 +58,7 @@ class Form1Definition:
             "max_pulse_entry": tk.Entry(tab_two_forms["max_pulse_form"]),
             "behavior_range_label": tk.Label(tab_two_forms["behavior_range_form"], text='モーターの回転幅', font=root_widgets["text_font"]),
             "behavior_range_entry": tk.Entry(tab_two_forms["behavior_range_form"]),
+            "save_button": tk.Button(note_book_widgets["tab_two"], text='save', font=("", 20)),
         }
 
         # config.iniをもとにwidgetを自動生成

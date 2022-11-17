@@ -5,6 +5,9 @@ import lib.Motor as Motor
 import Form1Definition
 import lib.KeyEvent as KeyEvent
 import os
+from functools import partial
+
+
 # import RPi.GPIO as GPIO
 
 
@@ -14,8 +17,17 @@ def canvas_sled():
     pass
 
 
-def main():
+class ConfigSave:
+    def __init__(self, widget_object):
+        self.widget_obj = widget_object
+        print(self.widget_obj['config_setting']['STEERING']['Rightinput'].winfo_name())
+        for i in list(self.widget_obj['config_setting'].values()):
+            for j in list(i.values()):
+                print(j.winfo_name())
+                if
 
+
+def main():
     # rootの設定
     root.title("motor")
     root.geometry("1024x768")
@@ -29,10 +41,11 @@ def main():
     # job1.start()
 
     # KeyEventを待機
-    widget_obj['note_book_widgets']['tab_one'].bind("<KeyPress>", key_event.bind_func)
+    root.bind("<KeyPress>", key_event.bind_func)
     root.bind("<KeyRelease>", key_event.bind_func)
     for i in list(widget_obj['config_setting']['KEY_CONFIG'].values()):
         i.bind("<Button-1>", key_event.key_setting)
+    widget_obj["tab_two_widgets"]["save_button"]['command'] = partial(ConfigSave, widget_obj)
     # formを待機
     root.mainloop()
 
