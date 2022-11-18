@@ -39,7 +39,6 @@ class Motor:
         self.p3.start(0)
         self.p4.start(0)
         self.p5.start(0)
-        self.p6.start(0)
         """
     def __safe_calculation(status: str):
         def safe_calculation_wrapper(func):
@@ -148,10 +147,8 @@ class Motor:
             self.p3.ChangeDutyCycle(left_motor_a)
             self.p4.ChangeDutyCycle(left_motor_b)
             self.p5.ChangeDutyCycle(steering_servo)
-            self.p6.ChangeDutyCycle(mission_servo)
             time.sleep(0.4)
             self.p5.ChangeDutyCycle(0.0)
-            self.p6.ChangeDutyCycle(0.0)
             """
             pass
 

@@ -54,7 +54,7 @@ class KeyEvent:
 
     def pressed_a(self):
         steering_left = float(self.config_ini['STEERING']['Left'])
-        self.motor.rotate_motor(self.duty, 0, self.duty-steering_left, 0, 0, 0)
+        self.motor.rotate_motor(self.duty, 0, self.duty - steering_left, 0, 0, 0)
 
     def pressed_w(self):
         if 100 > self.duty >= 0:
@@ -69,7 +69,7 @@ class KeyEvent:
 
     def pressed_d(self):
         steering_right = float(self.config_ini['STEERING']['Right'])
-        self.motor.rotate_motor(self.duty-steering_right, 0, self.duty, 0, 0, 0)
+        self.motor.rotate_motor(self.duty - steering_right, 0, self.duty, 0, 0, 0)
 
     def pressed_q(self):
         self.motor.__init__()
@@ -96,3 +96,8 @@ class KeyEvent:
             self.duty = self.motor.deceleration(self.duty)
             self.test_list.append(self.duty)
             self.motor.rotate_motor(self.duty, 0, self.duty, 0, 0, 0)
+
+    def pressed_mission(self):
+        angle = self.config_ini["MISSION_STEERING"]['Angle']
+        steering_duty = self.motor.convert_duty_percent_from_angle(angle)
+        self.motor.rotate_motor(self.duty, 0, self.duty, steering_duty, 0, 0)
