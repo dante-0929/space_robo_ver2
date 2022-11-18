@@ -20,11 +20,18 @@ def canvas_sled():
 class ConfigSave:
     def __init__(self, widget_object):
         self.widget_obj = widget_object
-        print(self.widget_obj['config_setting']['STEERING']['Rightinput'].winfo_name())
+        # print(self.widget_obj['config_setting']['STEERING']['Rightinput'].winfo_name())
         for i in list(self.widget_obj['config_setting'].values()):
             for j in list(i.values()):
-                print(j.winfo_name())
-                if
+                # print(j.winfo_name())
+                save_data = []
+                if "button" in j.winfo_name():
+                    save_data = j["text"]
+                elif "entry" in j.winfo_name():
+                    save_data = j.get()
+                elif "spinbox" in j.winfo_name():
+                    save_data = j.get()
+                print(save_data)
 
 
 def main():
