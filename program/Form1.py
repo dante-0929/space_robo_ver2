@@ -1,13 +1,12 @@
 import tkinter as tk
-import cv2
-from PIL import Image, ImageTk, ImageOps
 from lib import conversion as con
 
 
 class Form1:
     def __init__(self, root_instance, widget_obj):
         self.root = root_instance
-
+        self.root.title("space")
+        self.root.geometry("1024x768")
         # ウィジェットのインスタンスを定義ファイルから持ってくる
         self.wgl = widget_obj
 
@@ -19,9 +18,6 @@ class Form1:
             print('\033[96m' + 'Not Tkinter.Tk Object' + '\033[0m')
             print('\033[96m' + str(e) + '\033[0m')
 
-        # OpenCVのインスタンス及びカメラオープン
-        # self.capture = cv2.VideoCapture(0000)
-
     def player_screen(self):
 
         # タブをnotebookオブジェクトに追加して表示
@@ -30,29 +26,18 @@ class Form1:
         self.wgl["root_widgets"]["notebook"].pack(expand=True, fill='both')
 
         # playerタブのウィジェットを表示
-        for i in list(self.wgl["tab_one_widgets"].values()):
-            i.pack(expand=True, fill=tk.BOTH)
-        self.wgl["tab_one_widgets"]["main_canvas"].create_text(10, 10, anchor='nw', text='p1 duty:0.0')
-        self.wgl["tab_one_widgets"]["main_canvas"].create_text(10, 20, anchor='nw', text='p2 duty:0.0')
-        self.wgl["tab_one_widgets"]["main_canvas"].create_text(10, 30, anchor='nw', text='p3 duty:0.0')
-        self.wgl["tab_one_widgets"]["main_canvas"].create_text(10, 40, anchor='nw', text='p4 duty:0.0')
-        self.wgl["tab_one_widgets"]["main_canvas"].create_text(10, 50, anchor='nw', text='p5 duty:0.0')
-        self.wgl["tab_one_widgets"]["main_canvas"].create_text(10, 60, anchor='nw', text='p6 duty:0.0')
+        for i in list(self.wgl["main_canvas_widgets"].values()):
+            i.pack()
+        self.wgl["main_canvas_widgets"]["right_motor_scale"].set(1)
+        self.wgl["main_canvas_widgets"]["left_motor_scale"].set(1)
 
     def setting_screen(self):
-        print(self.wgl['config_setting'])
         # settingタブのウィジェットを表示
-        """
-        for i in list(self.wgl["tab_two_forms"].values()):
-            i.pack(anchor=tk.W)
-        for i in list(self.wgl["tab_two_widgets"].values()):
-            i.pack(anchor=tk.W)
-        """
+        self.wgl['config_setting']['note'].pack(fill='both')
         for i in list(self.wgl['config_setting'].values()):
+            if hasattr(i, 'winfo_name'):
+                if 'notebook' in i.winfo_name():
+                    continue
             for j in list(i.values()):
                 j.pack(anchor=tk.W)
         self.wgl["tab_two_widgets"]["save_button"].place(x=920, y=680)
-
-    def canvas_camera(self):
-        con.create_canvas_image(self.capture, self.display_width, self.display_height, self.wgl)
-        pass

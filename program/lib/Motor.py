@@ -1,21 +1,19 @@
-import configparser
 # import RPi.GPIO as GPIO
 from functools import wraps
 
 
 class Motor:
-    def __init__(self):
+    def __init__(self, config):
         # configファイルからデータを持ってくる
-        self.config_ini = configparser.ConfigParser()
-        self.config_ini.read('config/config.ini')
+        self.config_ini = config
 
         # TODO 変数aの名前を変える
         # 加速度の初期値
         self.a = 0
 
         self.difference = 0
-        rightmotor1 = self.config_ini['GPIO_PIN']['Rightmotor1']
-        rightmotor2 = self.config_ini['GPIO_PIN']['Rightmotor2']
+        rightmotor1 = self.config_ini['GPIO_PIN']['RightMotor1']
+        rightmotor2 = self.config_ini['GPIO_PIN']['RightMotor2']
         leftmotor1 = self.config_ini['GPIO_PIN']['LeftMotor1']
         leftmotor2 = self.config_ini['GPIO_PIN']['LeftMotor2']
         missionservo = self.config_ini['GPIO_PIN']['MissionServo']
@@ -118,121 +116,39 @@ class Motor:
         return pulse_cycle
 
     def rotate_motor(self, right_motor_a, right_motor_b, left_motor_a, left_motor_b, steering_servo, mission_servo):
-        if 0 > right_motor_a > 100:
+
+        # 使用不可能な値を使用可能な値へ変換
+        if 0 > right_motor_a or right_motor_a > 100:
             if right_motor_a < 0:
                 right_motor_a = 0
             elif right_motor_a > 100:
                 right_motor_a = 99.9
-        elif 0 > right_motor_b > 100:
+        elif 0 > right_motor_b or right_motor_b > 100:
             if right_motor_b < 0:
                 right_motor_b = 0
             elif right_motor_b > 100:
                 right_motor_b = 99.9
-        elif 0 > left_motor_a > 100:
+        elif 0 > left_motor_a or left_motor_a > 100:
             if left_motor_a < 0:
                 left_motor_a = 0
             elif left_motor_a > 100:
                 left_motor_a = 99.9
-        elif 0 > left_motor_b > 100:
+        elif 0 > left_motor_b or left_motor_b > 100:
             if left_motor_b < 0:
                 left_motor_b = 0
             elif left_motor_b > 100:
                 left_motor_b = 99.9
-        if not (0 > right_motor_a > 100 or right_motor_b > 100 or left_motor_a > 100 or left_motor_b > 100):
-            print(f"{right_motor_a},{right_motor_b},{left_motor_a},{left_motor_b},{steering_servo},{mission_servo}")
-            # form.pn_text_setting(0 > right_motor_a > 100 or right_motor_b > 100 or left_motor_a > 100 or left_motor_b > 100)
-            """
-            self.p1.ChangeDutyCycle(right_motor_a)
-            self.p2.ChangeDutyCycle(right_motor_b)
-            self.p3.ChangeDutyCycle(left_motor_a)
-            self.p4.ChangeDutyCycle(left_motor_b)
-            self.p5.ChangeDutyCycle(steering_servo)
-            time.sleep(0.4)
-            self.p5.ChangeDutyCycle(0.0)
-            """
-            pass
 
+        # duty比を出力
+        print(f"{right_motor_a},{right_motor_b},{left_motor_a},{left_motor_b},{steering_servo},{mission_servo}")
 
-class MotorSetting:
-    def __init__(self):
+        # duty比を変更
         """
-        # GPIO初期設定
-        GPIO.setmode(GPIO.BCM)
-        GPIO.setup(27, GPIO.OUT)
-        GPIO.setup(22, GPIO.OUT)
-        GPIO.setup(5, GPIO.OUT)
-        GPIO.setup(6, GPIO.OUT)
-        GPIO.setup(3, GPIO.OUT)
-        GPIO.setup(17, GPIO.OUT)
-
-        self.p1 = GPIO.PWM(27, 50)  # 50Hz
-        self.p2 = GPIO.PWM(22, 50)  # 50Hz
-        self.p3 = GPIO.PWM(5, 50)  # 50Hz
-        self.p4 = GPIO.PWM(6, 50)  # 50Hz
-        self.p5 = GPIO.PWM(3, 50)  # 50Hz
-        self.p6 = GPIO.PWM(17, 50)  #50Hz
-
-        self.p1.start(0)
-        self.p2.start(0)
-        self.p3.start(0)
-        self.p4.start(0)
-        self.p5.start(0)
-        self.p6.start(0)
+        self.p1.ChangeDutyCycle(right_motor_a)
+        self.p2.ChangeDutyCycle(right_motor_b)
+        self.p3.ChangeDutyCycle(left_motor_a)
+        self.p4.ChangeDutyCycle(left_motor_b)
+        self.p5.ChangeDutyCycle(steering_servo)
+        time.sleep(0.4)
+        self.p5.ChangeDutyCycle(0.0)
         """
-
-    def rotate_motor(self, right_motor_a, right_motor_b, left_motor_a, left_motor_b, steering_servo, mission_servo):
-        if not (0 > right_motor_a > 100 or right_motor_b > 100 or left_motor_a > 100 or left_motor_b > 100):
-            # form.pn_text_setting(0 > right_motor_a > 100 or right_motor_b > 100 or left_motor_a > 100 or left_motor_b > 100)
-            """
-            self.p1.ChangeDutyCycle(right_motor_a)
-            self.p2.ChangeDutyCycle(right_motor_b)
-            self.p3.ChangeDutyCycle(left_motor_a)
-            self.p4.ChangeDutyCycle(left_motor_b)
-            self.p5.ChangeDutyCycle(steering_servo)
-            self.p6.ChangeDutyCycle(mission_servo)
-            time.sleep(0.4)
-            self.p5.ChangeDutyCycle(0.0)
-            self.p6.ChangeDutyCycle(0.0)
-            """
-            pass
-
-    def motor_cleanup(self):
-        # GPIO.cleanup()
-        pass
-
-"""
-# GPIO初期設定
-GPIO.setmode(GPIO.BCM)
-GPIO.setup(27, GPIO.OUT)
-GPIO.setup(22, GPIO.OUT)
-GPIO.setup(5, GPIO.OUT)
-GPIO.setup(6, GPIO.OUT)
-GPIO.setup(3, GPIO.OUT)
-GPIO.setup(17, GPIO.OUT)
-
-self.p1 = GPIO.PWM(27, 50)  # 50Hz
-self.p2 = GPIO.PWM(22, 50)  # 50Hz
-self.p3 = GPIO.PWM(5, 50)  # 50Hz
-self.p4 = GPIO.PWM(6, 50)  # 50Hz
-self.p5 = GPIO.PWM(3, 50)  # 50Hz
-self.p6 = GPIO.PWM(17, 50)  #50Hz
-
-self.p1.start(0)
-self.p2.start(0)
-self.p3.start(0)
-self.p4.start(0)
-self.p5.start(0)
-self.p6.start(0)
-"""
-
-"""
-self.p1.ChangeDutyCycle(right_motor_a)
-self.p2.ChangeDutyCycle(right_motor_b)
-self.p3.ChangeDutyCycle(left_motor_a)
-self.p4.ChangeDutyCycle(left_motor_b)
-self.p5.ChangeDutyCycle(steering_servo)
-self.p6.ChangeDutyCycle(mission_servo)
-time.sleep(0.4)
-self.p5.ChangeDutyCycle(0.0)
-self.p6.ChangeDutyCycle(0.0)
-"""

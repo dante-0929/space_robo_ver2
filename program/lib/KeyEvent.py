@@ -1,38 +1,72 @@
-import configparser
 import tkinter as tk
-
-
 # import matplotlib.pyplot as plt
 
 
-class KeyEvent:
-    def __init__(self, motor_class, widget_obj):
-        self.config_ini = configparser.ConfigParser()
-        self.config_ini.optionxform = str
-        self.config_ini.read('config/config.ini')
+class MoveEvent:
+    def __init__(self, motor_class, widget_obj, config):
+        self.config_ini = config
         self.motor = motor_class
         self.widget_obj = widget_obj
-        self.sub_win = None
-        self.sub_label = ''
         self.duty = 0
         self.test_list = []
 
     def bind_func(self, event):
         key = event.keysym
         if key == self.config_ini['KEY_CONFIG']['MoveForward']:
-            self.pressed_w()
+            self.pressed_forward_key()
         elif key == self.config_ini['KEY_CONFIG']['MoveLeft']:
-            self.pressed_a()
+            self.pressed_left_key()
         elif key == self.config_ini['KEY_CONFIG']['MoveBack']:
-            self.pressed_s()
+            self.pressed_back_key()
         elif key == self.config_ini['KEY_CONFIG']['MoveRight']:
-            self.pressed_d()
-        elif key == "e":
-            self.pressed_e()
+            self.pressed_right_key()
         elif key == self.config_ini['KEY_CONFIG']['AllStop']:
-            self.pressed_q()
+            self.pressed_stop_key()
         elif key == self.config_ini['KEY_CONFIG']['Deceleration']:
-            self.pressed_shift()
+            self.pressed_deceleration_key()
+        elif key == self.config_ini['KEY_CONFIG']['Mission']:
+            self.pressed_mission_key()
+
+    def pressed_left_key(self):
+        steering_left = float(self.config_ini['STEERING']['Left'])
+        self.motor.rotate_motor(self.duty, 0, self.duty - steering_left, 0, 0, 0)
+
+    def pressed_forward_key(self):
+        if 100 > self.duty >= 0:
+            self.duty = self.motor.acceleration(self.duty)
+            self.test_list.append(self.duty)
+            self.motor.rotate_motor(self.duty, 0, self.duty, 0, 0, 0)
+
+    def pressed_back_key(self):
+        if 100 > self.duty >= 0:
+            self.duty = self.motor.acceleration(self.duty)
+            self.motor.rotate_motor(0, self.duty, 0, self.duty, 0, 0)
+
+    def pressed_right_key(self):
+        steering_right = float(self.config_ini['STEERING']['Right'])
+        self.motor.rotate_motor(self.duty - steering_right, 0, self.duty, 0, 0, 0)
+
+    def pressed_stop_key(self):
+        self.motor.__init__(self.config_ini)
+        self.duty = 0
+        self.motor.rotate_motor(0, 0, 0, 0, 0, 0)
+
+    def pressed_deceleration_key(self):
+        if 100 >= self.duty > 0:
+            self.duty = self.motor.deceleration(self.duty)
+            self.test_list.append(self.duty)
+            self.motor.rotate_motor(self.duty, 0, self.duty, 0, 0, 0)
+
+    def pressed_mission_key(self):
+        angle = self.config_ini["MISSION_STEERING"]['Angle']
+        steering_duty = self.motor.convert_duty_percent_from_angle(int(angle))
+        self.motor.rotate_motor(self.duty, 0, self.duty, steering_duty, 0, 0)
+
+
+class ConfigEvent:
+    def __init__(self):
+        self.sub_win = None
+        self.sub_label = ''
 
     def key_setting(self, event):
         if self.sub_win is None or not self.sub_win.winfo_exists():
@@ -51,53 +85,3 @@ class KeyEvent:
         key = event.keysym
         self.sub_label['text'] = key
         self.key_setting_widget['text'] = key
-
-    def pressed_a(self):
-        steering_left = float(self.config_ini['STEERING']['Left'])
-        self.motor.rotate_motor(self.duty, 0, self.duty - steering_left, 0, 0, 0)
-
-    def pressed_w(self):
-        if 100 > self.duty >= 0:
-            self.duty = self.motor.acceleration(self.duty)
-            self.test_list.append(self.duty)
-            self.motor.rotate_motor(self.duty, 0, self.duty, 0, 0, 0)
-
-    def pressed_s(self):
-        if 100 > self.duty >= 0:
-            self.duty = self.motor.acceleration(self.duty)
-            self.motor.rotate_motor(0, self.duty, 0, self.duty, 0, 0)
-
-    def pressed_d(self):
-        steering_right = float(self.config_ini['STEERING']['Right'])
-        self.motor.rotate_motor(self.duty - steering_right, 0, self.duty, 0, 0, 0)
-
-    def pressed_q(self):
-        self.motor.__init__()
-        self.duty = 0
-        self.motor.rotate_motor(0, 0, 0, 0, 0, 0)
-
-    def pressed_p(self):
-        if 100 > self.duty >= 0:
-            self.duty += 10
-            self.motor.rotate_motor(self.duty, 0, self.duty, 0, 0, 0)
-
-    def pressed_m(self):
-        if 100 >= self.duty > 0:
-            self.duty -= 10
-            self.motor.rotate_motor(self.duty, 0, self.duty, 0, 0, 0)
-
-    def pressed_e(self):
-        plt.plot(self.test_list, marker="o")
-        plt.grid(True)
-        plt.show()
-
-    def pressed_shift(self):
-        if 100 >= self.duty > 0:
-            self.duty = self.motor.deceleration(self.duty)
-            self.test_list.append(self.duty)
-            self.motor.rotate_motor(self.duty, 0, self.duty, 0, 0, 0)
-
-    def pressed_mission(self):
-        angle = self.config_ini["MISSION_STEERING"]['Angle']
-        steering_duty = self.motor.convert_duty_percent_from_angle(angle)
-        self.motor.rotate_motor(self.duty, 0, self.duty, steering_duty, 0, 0)

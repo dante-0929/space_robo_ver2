@@ -5,18 +5,15 @@
 import tkinter as tk
 import tkinter.ttk as ttk
 import tkinter.font as tkfont
-import configparser
 from lib.WidgetCreatorForConfig import *
 
 
 class Form1Definition:
-    def __init__(self, root_instance: tk.Tk):
+    def __init__(self, root_instance: tk.Tk, config):
         self.root = root_instance
 
         # config.iniからデータを読み取る
-        self.config_ini = configparser.ConfigParser()
-        self.config_ini.optionxform = str
-        self.config_ini.read('config/config.ini')
+        self.config_ini = config
 
     # tkinterのwidgetを定義
     def widgets_definition(self) -> dict:
@@ -24,6 +21,7 @@ class Form1Definition:
         root_widgets = {
             "notebook": ttk.Notebook(self.root),
             "text_font": tkfont.Font(size=10),
+
         }
 
         note_book_widgets = {
@@ -43,6 +41,11 @@ class Form1Definition:
             "duty_speed_p4": tk.Label(note_book_widgets["tab_one"], text="p4 duty:0.0", font=root_widgets["text_font"]),
             "duty_speed_p5": tk.Label(note_book_widgets["tab_one"], text="p5 duty:0.0", font=root_widgets["text_font"]),
             "duty_speed_p6": tk.Label(note_book_widgets["tab_one"], text="p6 duty:0.0", font=root_widgets["text_font"]),
+            "mission_scale": ttk.Scale(note_book_widgets["tab_one"], orient=tk.HORIZONTAL, from_=0, to=float(self.config_ini["SERVO_MOTOR"]["BehaviorRange"])),
+            "right_motor_scale": ttk.Scale(note_book_widgets["tab_one"], orient=tk.HORIZONTAL, from_=0, to=2),
+            "left_motor_scale": ttk.Scale(note_book_widgets["tab_one"], orient=tk.HORIZONTAL, from_=0, to=2),
+
+
         }
 
         tab_two_forms = {
@@ -75,4 +78,3 @@ class Form1Definition:
             "config_setting": out_create.bunch_create(),
         }
         return widgets
-        key_event = KeyEvent.KeyEvent(self.duty_speed_p1)
