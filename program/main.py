@@ -99,7 +99,6 @@ def main():
 
     # ゲイン及びサーボモーターの調整用
     test_events = TestEvents(config_ini, motor, move_event)
-
     widget_obj["main_canvas_widgets"]["mission_scale"]['command'] = test_events.servo
     widget_obj["main_canvas_widgets"]["right_motor_scale"]['command'] = test_events.right_gain
     widget_obj["main_canvas_widgets"]["left_motor_scale"]['command'] = test_events.left_gain

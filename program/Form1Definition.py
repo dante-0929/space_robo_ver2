@@ -40,7 +40,6 @@ class Form1Definition:
             "duty_speed_p3": tk.Label(note_book_widgets["tab_one"], text="p3 duty:0.0", font=root_widgets["text_font"]),
             "duty_speed_p4": tk.Label(note_book_widgets["tab_one"], text="p4 duty:0.0", font=root_widgets["text_font"]),
             "duty_speed_p5": tk.Label(note_book_widgets["tab_one"], text="p5 duty:0.0", font=root_widgets["text_font"]),
-            "duty_speed_p6": tk.Label(note_book_widgets["tab_one"], text="p6 duty:0.0", font=root_widgets["text_font"]),
             "mission_scale": ttk.Scale(note_book_widgets["tab_one"], orient=tk.HORIZONTAL, from_=0, to=float(self.config_ini["SERVO_MOTOR"]["BehaviorRange"])),
             "right_motor_scale": ttk.Scale(note_book_widgets["tab_one"], orient=tk.HORIZONTAL, from_=0, to=2),
             "left_motor_scale": ttk.Scale(note_book_widgets["tab_one"], orient=tk.HORIZONTAL, from_=0, to=2),

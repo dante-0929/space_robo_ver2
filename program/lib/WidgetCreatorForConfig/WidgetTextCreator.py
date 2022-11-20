@@ -1,10 +1,3 @@
-import configparser
-
-
-# print(dict(config_ini))
-# print(dict(config_ini['SERVO_MOTOR']))
-
-
 class TextCreator:
     def __init__(self, config_ini):
         self.config_ini = config_ini

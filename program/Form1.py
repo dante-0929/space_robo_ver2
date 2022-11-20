@@ -1,5 +1,4 @@
 import tkinter as tk
-from lib import conversion as con
 
 
 class Form1:

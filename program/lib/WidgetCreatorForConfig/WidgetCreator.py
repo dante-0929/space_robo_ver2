@@ -20,10 +20,6 @@ class OutCreateWidget:
         for i, j in enumerate(list(self.config_ini)):
             self.frame_list.append(tk.Frame(self.note))
             self.note.add(self.frame_list[i], text=j)
-
-        for i, j in enumerate(list(self.config_ini)):
-            self.frame_list.append(tk.Frame(self.note))
-            self.note.add(self.frame_list[i], text=j)
             if 'Type' in self.config_ini[j]:
                 if self.config_ini[j]['Type'] == "Spinbox":
                     reply[j] = self.type_spinbox(j, i)
