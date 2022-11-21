@@ -1,8 +1,13 @@
 import tkinter as tk
+
+
+# import RPi.GPIO as GPIO
 # import matplotlib.pyplot as plt
 
 
 class MoveEvent:
+    direction = 0
+
     def __init__(self, motor_class, widget_obj, config):
         self.config_ini = config
         self.motor = motor_class
@@ -28,25 +33,37 @@ class MoveEvent:
             self.pressed_mission_key()
 
     def pressed_left_key(self):
+        MoveEvent.direction = 0
         steering_left = float(self.config_ini['STEERING']['Left'])
-        self.motor.rotate_motor(self.duty, 0, self.duty - steering_left, 0, 0, 0)
+        if MoveEvent.direction == 0:
+            self.motor.rotate_motor(self.duty, 0, self.duty - steering_left, 0, 0, 0)
+        elif MoveEvent.direction == 1:
+            self.motor.rotate_motor(0, self.duty, 0, self.duty - steering_left, 0, 0)
 
     def pressed_forward_key(self):
         if 100 > self.duty >= 0:
             self.duty = self.motor.acceleration(self.duty)
             self.test_list.append(self.duty)
-            self.motor.rotate_motor(self.duty, 0, self.duty, 0, 0, 0)
+            if MoveEvent.direction == 0:
+                self.motor.rotate_motor(self.duty, 0, self.duty, 0, 0, 0)
+            elif MoveEvent.direction == 1:
+                self.motor.rotate_motor(0, self.duty, 0, self.duty, 0, 0)
 
     def pressed_back_key(self):
         if 100 > self.duty >= 0:
+            MoveEvent.direction = 1
             self.duty = self.motor.acceleration(self.duty)
             self.motor.rotate_motor(0, self.duty, 0, self.duty, 0, 0)
 
     def pressed_right_key(self):
         steering_right = float(self.config_ini['STEERING']['Right'])
-        self.motor.rotate_motor(self.duty - steering_right, 0, self.duty, 0, 0, 0)
+        if MoveEvent.direction == 0:
+            self.motor.rotate_motor(self.duty - steering_right, 0, self.duty, 0, 0, 0)
+        elif MoveEvent.direction == 1:
+            self.motor.rotate_motor(0, self.duty - steering_right, 0, self.duty, 0, 0)
 
     def pressed_stop_key(self):
+        # GPIO.cleanup()
         self.motor.__init__(self.config_ini)
         self.duty = 0
         self.motor.rotate_motor(0, 0, 0, 0, 0, 0)

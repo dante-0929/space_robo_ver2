@@ -102,10 +102,9 @@ class Motor:
         behavior_range = float(self.config_ini['SERVO_MOTOR']['BehaviorRange'])
         max_duty_percent = self.convert_duty_percent_from_pulse(max_pulse)
         minimum_duty_percent = self.convert_duty_percent_from_pulse(minimum_pulse)
-        rs = (minimum_duty_percent
-              + (max_duty_percent - minimum_duty_percent)
-              / behavior_range
-              * (angle + behavior_range))
+        ratio = (max_duty_percent - minimum_duty_percent) / behavior_range
+        rs = angle * ratio
+        rs += minimum_duty_percent
         return rs
 
     # ============================================================
