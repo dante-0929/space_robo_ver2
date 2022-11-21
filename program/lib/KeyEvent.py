@@ -2,7 +2,7 @@ import tkinter as tk
 
 
 # import RPi.GPIO as GPIO
-import matplotlib.pyplot as plt
+# import matplotlib.pyplot as plt
 
 
 class MoveEvent:
