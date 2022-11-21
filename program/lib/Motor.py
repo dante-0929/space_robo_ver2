@@ -137,7 +137,6 @@ class Motor:
                 left_motor_b = 0
             elif left_motor_b > 100:
                 left_motor_b = 99.9
-
         # duty比を出力
         print(f"{right_motor_a},{right_motor_b},{left_motor_a},{left_motor_b},{steering_servo},{mission_servo}")
 
@@ -148,6 +147,6 @@ class Motor:
         self.p3.ChangeDutyCycle(left_motor_a)
         self.p4.ChangeDutyCycle(left_motor_b)
         self.p5.ChangeDutyCycle(steering_servo)
-        time.sleep(0.4)
+        time.sleep(0.04)
         self.p5.ChangeDutyCycle(0.0)
         """

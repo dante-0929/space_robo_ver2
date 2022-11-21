@@ -88,7 +88,7 @@ def main():
 
     # 移動用のキーイベントの発生を待機
     root.bind("<KeyPress>", move_event.bind_func)
-    root.bind("<KeyRelease>", move_event.bind_func)
+    # root.bind("<KeyRelease>", move_event.bind_func)
 
     # 設定タブのKEY_CONFIG欄のボタンが押されたときのイベントを設定
     for i in list(widget_obj['config_setting']['KEY_CONFIG'].values()):

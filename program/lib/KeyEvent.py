@@ -2,11 +2,12 @@ import tkinter as tk
 
 
 # import RPi.GPIO as GPIO
-# import matplotlib.pyplot as plt
+import matplotlib.pyplot as plt
 
 
 class MoveEvent:
     direction = 0
+    servo_status = 0
 
     def __init__(self, motor_class, widget_obj, config):
         self.config_ini = config
@@ -14,6 +15,7 @@ class MoveEvent:
         self.widget_obj = widget_obj
         self.duty = 0
         self.test_list = []
+        self.gain = float(config['MOTOR_SETTING']['Gain'])
 
     def bind_func(self, event):
         key = event.keysym
@@ -33,34 +35,31 @@ class MoveEvent:
             self.pressed_mission_key()
 
     def pressed_left_key(self):
-        MoveEvent.direction = 0
         steering_left = float(self.config_ini['STEERING']['Left'])
         if MoveEvent.direction == 0:
-            self.motor.rotate_motor(self.duty, 0, self.duty - steering_left, 0, 0, 0)
+            self.motor.rotate_motor(self.duty*self.gain, 0, self.duty - steering_left, 0, 0, 0)
         elif MoveEvent.direction == 1:
-            self.motor.rotate_motor(0, self.duty, 0, self.duty - steering_left, 0, 0)
+            self.motor.rotate_motor(0, self.duty*self.gain, 0, self.duty - steering_left, 0, 0)
 
     def pressed_forward_key(self):
         if 100 > self.duty >= 0:
+            MoveEvent.direction = 0
             self.duty = self.motor.acceleration(self.duty)
             self.test_list.append(self.duty)
-            if MoveEvent.direction == 0:
-                self.motor.rotate_motor(self.duty, 0, self.duty, 0, 0, 0)
-            elif MoveEvent.direction == 1:
-                self.motor.rotate_motor(0, self.duty, 0, self.duty, 0, 0)
+            self.motor.rotate_motor(self.duty*self.gain, 0, self.duty, 0, 0, 0)
 
     def pressed_back_key(self):
         if 100 > self.duty >= 0:
             MoveEvent.direction = 1
             self.duty = self.motor.acceleration(self.duty)
-            self.motor.rotate_motor(0, self.duty, 0, self.duty, 0, 0)
+            self.motor.rotate_motor(0, self.duty*self.gain, 0, self.duty, 0, 0)
 
     def pressed_right_key(self):
         steering_right = float(self.config_ini['STEERING']['Right'])
         if MoveEvent.direction == 0:
-            self.motor.rotate_motor(self.duty - steering_right, 0, self.duty, 0, 0, 0)
+            self.motor.rotate_motor((self.duty - steering_right)*self.gain, 0, self.duty, 0, 0, 0)
         elif MoveEvent.direction == 1:
-            self.motor.rotate_motor(0, self.duty - steering_right, 0, self.duty, 0, 0)
+            self.motor.rotate_motor(0, (self.duty - steering_right)*self.gain, 0, self.duty, 0, 0)
 
     def pressed_stop_key(self):
         # GPIO.cleanup()
@@ -71,13 +70,26 @@ class MoveEvent:
     def pressed_deceleration_key(self):
         if 100 >= self.duty > 0:
             self.duty = self.motor.deceleration(self.duty)
-            self.test_list.append(self.duty)
-            self.motor.rotate_motor(self.duty, 0, self.duty, 0, 0, 0)
+            if MoveEvent.direction == 0:
+                self.motor.rotate_motor(self.duty*self.gain, 0, self.duty, 0, 0, 0)
+            elif MoveEvent.direction == 1:
+                self.motor.rotate_motor(0, self.duty*self.gain, 0, self.duty, 0, 0)
 
     def pressed_mission_key(self):
-        angle = self.config_ini["MISSION_STEERING"]['Angle']
-        steering_duty = self.motor.convert_duty_percent_from_angle(int(angle))
-        self.motor.rotate_motor(self.duty, 0, self.duty, steering_duty, 0, 0)
+        # angle = self.config_ini["MISSION_STEERING"]['Angle']
+        # steering_duty = self.motor.convert_duty_percent_from_angle(int(angle))
+        if MoveEvent.servo_status == 0:
+            MoveEvent.servo_status = 1
+            if MoveEvent.direction == 0:
+                self.motor.rotate_motor(self.duty * self.gain, 0, self.duty, 0, 2.5, 0)
+            elif MoveEvent.direction == 1:
+                self.motor.rotate_motor(0, self.duty * self.gain, 0, self.duty, 2.5, 0)
+        elif MoveEvent.servo_status == 1:
+            MoveEvent.servo_status = 0
+            if MoveEvent.direction == 0:
+                self.motor.rotate_motor(self.duty * self.gain, 0, self.duty, 0, 12.0, 0)
+            elif MoveEvent.direction == 1:
+                self.motor.rotate_motor(0, self.duty * self.gain, 0, self.duty, 12.0, 0)
 
 
 class ConfigEvent:
