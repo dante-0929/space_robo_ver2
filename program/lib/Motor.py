@@ -1,4 +1,6 @@
 # import RPi.GPIO as GPIO
+# from gpiozero import AngularServo
+# from gpiozero.pins.pigpio import PiGPIOFactory
 from functools import wraps
 
 
@@ -16,7 +18,19 @@ class Motor:
         rightmotor2 = self.config_ini['GPIO_PIN']['RightMotor2']
         leftmotor1 = self.config_ini['GPIO_PIN']['LeftMotor1']
         leftmotor2 = self.config_ini['GPIO_PIN']['LeftMotor2']
-        missionservo = self.config_ini['GPIO_PIN']['MissionServo']
+        # missionservo = self.config_ini['GPIO_PIN']['MissionServo']
+        SERVO_PIN = 12  # SG90-1
+
+        MIN_DEGREE = -90  # 000 : -90degree
+        MAX_DEGREE = 90  # 180 : +90degree
+        # 初期化
+        """
+        factory = PiGPIOFactory()
+        # min_pulse_width, max_pulse_width, frame_width =>SG90仕様
+        self.servo = AngularServo(SERVO_PIN, min_angle=MIN_DEGREE, max_angle=MAX_DEGREE,
+                             min_pulse_width=0.5 / 1000, max_pulse_width=2.4 / 1000, frame_width=1 / 50,
+                             pinfactory=factory)
+        """
         """
         # GPIO初期設定
         GPIO.setmode(GPIO.BCM)
@@ -24,13 +38,13 @@ class Motor:
         GPIO.setup(rightmotor2, GPIO.OUT)
         GPIO.setup(leftmotor1, GPIO.OUT)
         GPIO.setup(leftmotor2, GPIO.OUT)
-        GPIO.setup(missionservo, GPIO.OUT)
+        # GPIO.setup(missionservo, GPIO.OUT)
 
         self.p1 = GPIO.PWM(rightmotor1, 50)  # 50Hz
         self.p2 = GPIO.PWM(rightmotor2, 50)  # 50Hz
         self.p3 = GPIO.PWM(leftmotor1, 50)  # 50Hz
         self.p4 = GPIO.PWM(leftmotor2, 50)  # 50Hz
-        self.p5 = GPIO.PWM(missionservo, 50)  # 50Hz
+        # self.p5 = GPIO.PWM(missionservo, 50)  # 50Hz
 
         self.p1.start(0)
         self.p2.start(0)
@@ -146,7 +160,8 @@ class Motor:
         self.p2.ChangeDutyCycle(right_motor_b)
         self.p3.ChangeDutyCycle(left_motor_a)
         self.p4.ChangeDutyCycle(left_motor_b)
-        self.p5.ChangeDutyCycle(steering_servo)
-        time.sleep(0.04)
-        self.p5.ChangeDutyCycle(0.0)
+        # self.p5.ChangeDutyCycle(steering_servo)
+        self.servo.angle = steering_servo
+        time.sleep(1.0)
+        # self.p5.ChangeDutyCycle(0.0)
         """
