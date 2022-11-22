@@ -30,8 +30,6 @@ class Motor:
         self.servo = AngularServo(SERVO_PIN, min_angle=MIN_DEGREE, max_angle=MAX_DEGREE,
                              min_pulse_width=0.5 / 1000, max_pulse_width=2.4 / 1000, frame_width=1 / 50,
                              pinfactory=factory)
-        """
-        """
         # GPIO初期設定
         GPIO.setmode(GPIO.BCM)
         GPIO.setup(rightmotor1, GPIO.OUT)
