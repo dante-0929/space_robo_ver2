@@ -161,7 +161,8 @@ class Motor:
         self.p3.ChangeDutyCycle(left_motor_a)
         self.p4.ChangeDutyCycle(left_motor_b)
         # self.p5.ChangeDutyCycle(steering_servo)
-        self.servo.angle = steering_servo
-        time.sleep(1.0)
+        if mission_servo == 1:
+            self.servo.angle = steering_servo
+            time.sleep(1.0)
         # self.p5.ChangeDutyCycle(0.0)
         """

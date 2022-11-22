@@ -81,15 +81,15 @@ class MoveEvent:
         if MoveEvent.servo_status == 0:
             MoveEvent.servo_status = 1
             if MoveEvent.direction == 0:
-                self.motor.rotate_motor(self.duty * self.gain, 0, self.duty, 0, 140, 0)
+                self.motor.rotate_motor(self.duty * self.gain, 0, self.duty, 0, 140, 1)
             elif MoveEvent.direction == 1:
-                self.motor.rotate_motor(0, self.duty * self.gain, 0, self.duty, 140, 0)
+                self.motor.rotate_motor(0, self.duty * self.gain, 0, self.duty, 140, 1)
         elif MoveEvent.servo_status == 1:
             MoveEvent.servo_status = 0
             if MoveEvent.direction == 0:
-                self.motor.rotate_motor(self.duty * self.gain, 0, self.duty, 0, 0, 0)
+                self.motor.rotate_motor(self.duty * self.gain, 0, self.duty, 0, 0, 1)
             elif MoveEvent.direction == 1:
-                self.motor.rotate_motor(0, self.duty * self.gain, 0, self.duty, 0, 0)
+                self.motor.rotate_motor(0, self.duty * self.gain, 0, self.duty, 0, 1)
 
 
 class ConfigEvent:
