@@ -2,7 +2,7 @@
 宇宙探求部のバージョン２
 
 ## はじめに
-このソースコードは`.net framework`と`Django`を参考に作られている。
+このソースコードは[`.net framework`](#https://dotnet.microsoft.com/ja-jp/learn/dotnet/what-is-dotnet-framework)と[`Django`](#https://docs.djangoproject.com/ja/4.1/)を参考に作られている。
 
 
 ## 目次
@@ -16,12 +16,22 @@
 ## ファイルツリー
 <pre>
 program
-   │  config.ini          // 設定
-   │  Form1.py            // tkinterの表示/非表示の切り替え
-   │  Form1Definition.py  // tkinterのウィジェットの定義
-   │  main.py             // 全体の大まかな制御
-   │  Motor.py            // モータを制御するための計算など
-   └─ README.md          
+.
+├── README.md  // readmeドキュメント
+├── env.sh     // 環境構築をする
+└── program    // 実際に動かすプログラムが入っている
+    ├── Form1.py  // ウィジェットをタブ単位で制御
+    ├── Form1Definition.py  // ウィジェットインスタンスの定義
+    ├── config
+    │   └── config.ini  // 各設定項目
+    ├── lib
+    │   ├── KeyEvent.py  // キーイベント発生時の処理
+    │   ├── Motor.py  // モーターの計算＆実行
+    │   └── WidgetCreatorForConfig
+    │       ├── WidgetCreator.py  // configからウィジェットインスタンを作成
+    │       ├── WidgetTextCreator.py  // テキストを作成
+    │       └── __init__.py  // パッケージのルーティングの定義
+    └── main.py  // 全体の大まかな流れ
 </pre>
 
 ## config.ini
@@ -32,10 +42,18 @@ MinimumPulse  ・・・・ 制御パルスの最低値
 MaxPulse      ・・・・ 制御パルスの最大値  
 BehaviorRange ・・・・ モーターの可動域  
 </pre>
+### [MOTOR_SETTING]　モーターの設定
+<pre>
+Gain ・・・・ モーターのゲインを設定
+</pre>
 ### [STEERING]　ステアリングの設定
 <pre>
 Right ・・・ ステアリングが右に傾く角度
 Left  ・・・ ステアリングが左に傾く角度
+</pre>
+### [MISSION_STEERING]　ミッション用のサーボ設定
+<pre>
+Angle ・・・・ サーボの稼働範囲
 </pre>
 ### [KEY_CONFIG]　キーコンフィグ
 <pre>
@@ -45,6 +63,14 @@ MoveLeft     ・・・・ 左移動キー
 MoveRight    ・・・・ 右移動キー
 AllStop      ・・・・ 急に止まるキー
 Deceleration ・・・・ ゆっくり止まるキー
+Mission      ・・・・ ミッション用サーボのトリガーキー
+</pre>
+### [GPIO_PIN]　GPIOのピン設定
+<pre>
+RightMotor1 ・・・・ 右モーターのGPIOピン1
+RightMotor2 ・・・・ 右モーターのGPIOピン2
+LeftMotor1  ・・・・ 左モーターのGPIOピン1
+LeftMotor2  ・・・・ 左モーターのGPIOピン2
 </pre>
 
 ## Form1.py  
@@ -64,17 +90,17 @@ wgl = FormDefinition.widgets_definition()
 ```python
 {
     "root_widgets": {
-            "widget1": Widget1.Instance,
-            "widget2": Widget2.Instance,
-            "widget3": Widget3.Instance,
+            "widget1": Widget1.Instance(),
+            "widget2": Widget2.Instance(),
+            "widget3": Widget3.Instance(),
             ...
             ...
             ...
         },
     "note_book_widgets": {
-            "widget1": Widget1.Instance,
-            "widget2": Widget2.Instance,
-            "widget3": Widget3.Instance,
+            "widget1": Widget1.Instance(),
+            "widget2": Widget2.Instance(),
+            "widget3": Widget3.Instance(),
             ...
             ...
             ...
